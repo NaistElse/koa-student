@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>学生信息</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="./node_modules/jquery-confirm/dist/jquery-confirm.min.css">
+    <link rel="stylesheet" href="./public/css/list.css">
+  </head>
+  <body>
+    <div class="jumbotron">
+      <form action="/list" method="get">
+        <div class="serach">
+          <span><a href="/list">请输入姓名</a></span>
+          <input type="text" class="form-control chaozhao" name="sname" placeholder="查找学生的姓名">
+          <input type="submit" class="btn btn-success queding" name="" value="查找">
+        </div>
+      </form>
+
+      <button id="addstudent" type="button" class="btn btn-info add" name="button">添加学生信息</button>
+
+
+      <div class="list">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <td>sno</td>
+              <td>sname</td>
+              <td>ssex</td>
+              <td>sclass</td>
+              <td>sdept</td>
+              <td>spwd</td>
+              <td>stauts</td>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in students %}
+            <tr>
+              <td>{{ student.sno }}</td>
+              <td>{{ student.sname }}</td>
+              <td>{{ student.ssex }}</td>
+              <td>{{ student.sclass }}</td>
+              <td>{{ student.category }}</td>
+              <td>{{ student.spwd }}</td>
+              <td style="width: 125px">
+                <a id="modfiy" data-id="{{ student.sno }}" href="javascript:;"><button type="button" class="btn btn-primary btn-sm" name="button">修改</button></a>
+                <button id="deletestu" data-id="{{ student.sno }}" data-name="{{ student.sname }}" type="button" class="btn btn-danger btn-sm" name="button">删除</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% if stauts %}
+        <div class="alert alert-danger" role="alert"><strong>没有查询到此学生</strong></div>
+        {% endif %}
+      </div>
+
+
+    </div>
+
+
+    <!-- 修改模态框 -->
+    {% for student in students %}
+    <div class="modal fade" id="myModal{{ student.sno }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">修改{{ student.sname }}学生信息</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+
+            <table class="formmodfiy">
+              <form>
+                <tbody>
+                  <tr>
+                    <td>学号</td>
+                    <td>
+                      <input type="text" class="form-control" value="{{ student.sno }}" disabled>
+                      <input type="hidden" name="sno" value="{{ student.sno }}">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>姓名</td>
+                    <td><input type="text" class="form-control" name="sname" value="{{ student.sname }}"></td>
+                  </tr>
+                  <tr>
+                    <td>性别</td>
+                    <td>
+                    <div class="radio">
+                      {% if student.ssex == '男' %}
+                      <label>
+                        <input type="radio" name="ssex" value="男" checked>男
+                      </label>
+                      <label>
+                        <input type="radio" name="ssex" value="女">女
+                      </label>
+                    </div>
+                      {% else %}
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="ssex" value="男">男
+                        </label>
+                        <label>
+                          <input type="radio" name="ssex" value="女" checked>女
+                        </label>
+                      </div>
+                      {% endif %}
+
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>班级</td>
+                    <td>
+                      <input type="text" class="form-control" name="sclass" value="{{ student.sclass }}">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>系别</td>
+                    <td>
+                      <select name="sdept_id" class="form-control">
+                        {% for categories in specialtycategory %}
+                        <option value="{{ categories.id }}" {% if student.sdept_id == categories.id  %} selected {% endif %} >{{ categories.category }}</option>
+                        {% endfor %}
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>密码</td>
+                    <td><input type="password" class="form-control" name="spwd" value="{{ student.spwd }}"></td>
+                  </tr>
+                </tbody>
+              </form>
+            </table>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+            <button id="ok" type="button" class="btn btn-success">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+
+    <!-- 添加模态框 -->
+    <div class="modal fade" id="myModal_add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">添加学生信息</h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+
+            <table class="formmodfiy">
+              <form id="formadd">
+                <tbody>
+                  <tr>
+                    <td>学号</td>
+                    <td>
+                      <input type="text" class="form-control" name="sno" value="">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>姓名</td>
+                    <td><input type="text" class="form-control" name="sname" value=""></td>
+                  </tr>
+                  <tr>
+                    <td>性别</td>
+                    <td>
+                      <div class="radio">
+                        <label>
+                          <input type="radio" name="ssex" value="男">男
+                        </label>
+                        <label>
+                          <input type="radio" name="ssex" value="女">女
+                        </label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>班级</td>
+                    <td>
+                      <input type="text" class="form-control" name="sclass" value="">
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>系别</td>
+                    <td>
+                      <select name="sdept_id" class="form-control">
+                        {% for categories in specialtycategory %}
+                        <option value="{{ categories.id }}">{{ categories.category }}</option>
+                        {% endfor %}
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>密码</td>
+                    <td><input type="password" class="form-control" name="spwd" value=""></td>
+                  </tr>
+                </tbody>
+              </form>
+            </table>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">取消</button>
+            <button id="addstu" type="button" class="btn btn-success">确定</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+  </body>
+  <script type="text/javascript" src="./node_modules/jquery/dist/jquery.js"></script>
+  <script type="text/javascript" src="./node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script type="text/javascript" src="./node_modules/jquery-confirm/dist/jquery-confirm.min.js"></script>
+  <script type="text/javascript">
+  // 修改学生
+    $('*[id=modfiy]').on('click', function() {
+      var sno = $(this).data('id')
+      $('#myModal' + sno).modal({
+           backdrop: 'static'
+      })
+    })
+
+    $('*[id=ok]').on('click', function() {
+      var formdata = ($(this).parent().parent().find('form')).serialize()
+      $.ajax({
+        url: '/modfiy',
+        type: 'POST',
+        dataType: 'json',
+        data: formdata
+      })
+      .then(function(data) {
+        if(data.stauts == 0) {
+          $.alert({
+            title: '提示!',
+            content: data.message,
+          })
+        } else {
+          $.alert({
+            title: '提示!',
+            content: data.message,
+            buttons: {
+              '确定': function() {
+                window.location.href = '/list'
+              }
+            }
+          })
+        }
+      })
+    })
+
+
+    // 添加学生
+    $('#addstudent').on('click', function() {
+      $('#myModal_add').modal({
+        backdrop: 'static'
+      })
+    })
+
+    $('#addstu').on('click', function() {
+      var formdata = $('#formadd').serialize()
+      $.ajax({
+        url: '/addstudent',
+        type: 'POST',
+        dataType: 'json',
+        data: formdata
+      })
+      .then(function(data) {
+        if(data.stauts == 0) {
+          $.alert({
+            title: '提示!',
+            content: data.message,
+          })
+        }else {
+          $.alert({
+            title: '提示!',
+            content: data.message,
+            buttons: {
+              '确定': function() {
+                window.location.href = '/list'
+              }
+            }
+          })
+        }
+      })
+    })
+
+
+    // 删除学生
+    $('*[id=deletestu]').on('click', function() {
+      var sno = $(this).data('id')
+      var sname = $(this).data('name')
+      $.confirm({
+          title: '删除学生!',
+          content: '是否删除 ' + sname + ' 同学?',
+          type: 'red',
+          typeAnimated: true,
+          buttons: {
+                tryAgain: {
+                  text: '确定',
+                  btnClass: 'btn-red',
+
+                  action: function(){
+                    $.alert({
+                      content: function(){
+                          var self = this
+                          return $.ajax({
+                              url: '/delete?sno=' + sno,
+                              dataType: 'json',
+                              method: 'get'
+                          })
+                          .then(function(data) {
+                            if(data.stauts == 0) {
+                              $.alert({
+                                title: '提示!',
+                                content: data.message,
+                              })
+                            }else {
+                              $.alert({
+                                title: '提示!',
+                                content: data.message,
+                                buttons: {
+                                  '确定': function() {
+                                    window.location.href = '/list'
+                                  }
+                                }
+                              })
+                            }
+                          })
+                      }
+                    })
+                  }
+            },
+            '取消': function () {
+            }
+          }
+      })
+    })
+  </script>
+</html>

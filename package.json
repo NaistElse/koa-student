@@ -1,0 +1,27 @@
+{
+  "name": "DBExperiment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^4.5.2",
+    "jquery": "^3.5.1",
+    "jquery-confirm": "^3.3.4",
+    "koa": "^2.13.0",
+    "koa-bodyparser": "^4.3.0",
+    "koa-nunjucks-2": "^3.0.2",
+    "koa-router": "^9.4.0",
+    "koa-session": "^6.0.0",
+    "mime": "^2.4.6",
+    "mysql": "^2.18.1",
+    "mz": "^2.7.0",
+    "nodemon": "^2.0.4",
+    "nunjucks": "^3.2.2"
+  }
+}

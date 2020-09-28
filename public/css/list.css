@@ -1,0 +1,55 @@
+.serach{
+  width: 600px;
+  height: 40px;
+  margin: 0 auto;
+  position: relative;
+}
+
+span{
+  font-size: 20px;
+  line-height: 40px;
+  position: relative;
+}
+
+a{
+  text-decoration: none;
+}
+a:visited{
+  text-decoration: none;
+}
+a:hover{
+  text-decoration: none;
+}
+a:active{
+  text-decoration: none;
+}
+
+.queding{
+  position: relative;
+  float: right;
+}
+
+.chaozhao{
+  width: 430px;
+  position: absolute;
+  top: 0px;
+  left: 105px;
+}
+
+.list{
+  width: 650px;
+  margin: 0 auto;
+  position: relative;
+  top: 40px;
+}
+
+.formmodfiy{
+  position: relative;
+  margin: 0 auto;
+}
+
+.add{
+  position: relative;
+  top: 20px;
+  left: 300px;
+}
