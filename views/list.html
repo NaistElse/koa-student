@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="./node_modules/jquery-confirm/dist/jquery-confirm.min.css">
     <link rel="stylesheet" href="./public/css/list.css">
+
+
   </head>
   <body>
     <div class="jumbotron">
@@ -17,7 +19,37 @@
         </div>
       </form>
 
-      <button id="addstudent" type="button" class="btn btn-info add" name="button">添加学生信息</button>
+      <div class="row juzhong">
+        <div class="col-md-4">
+          <button id="addstudent" type="button" class="btn btn-info" name="button">添加学生信息</button>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+          {% if pagination %}
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item">
+                  <a class="page-link" href="?page={% if((pagination.page - 1) <= 0)%} 1 {% else %} {{ pagination.page - 1 }} {% endif %}">Previous</a>
+                </li>
+
+                {% for i in range(pagination.begin, pagination.end + 1) %}
+
+                  <li class="page-item {% if i == pagination.page %} active {% else %} {% endif %}"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+
+                {% endfor %}
+
+                <li class="page-item">
+                  <a class="page-link" href="?page={% if((pagination.page + 1) > pagination.total_pages) %} {{ pagination.total_pages }} {% else %} {{ pagination.page + 1 }} {% endif %}">Next</a>
+                </li>
+              </ul>
+            </nav>
+          {% endif %}
+
+        </div>
+      </div>
+
+
 
 
       <div class="list">

@@ -40,7 +40,13 @@ a:active{
   width: 650px;
   margin: 0 auto;
   position: relative;
-  top: 40px;
+  margin-top: 20px;
+}
+
+.juzhong{
+  width: 650px;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 
 .formmodfiy{
