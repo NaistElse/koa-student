@@ -20,31 +20,23 @@
       </form>
 
       <div class="row juzhong">
-        <div class="col-md-4">
+        <div class="col-md-6">
           <button id="addstudent" type="button" class="btn btn-info" name="button">添加学生信息</button>
         </div>
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
+        <div class="col-md-6">
 
-          {% if pagination %}
-            <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center">
-                <li class="page-item">
-                  <a class="page-link" href="?page={% if((pagination.page - 1) <= 0)%} 1 {% else %} {{ pagination.page - 1 }} {% endif %}">Previous</a>
-                </li>
+          <form action="/list" method="get">
+            <select class="form-control input-sm shaixuan" name="category">
+              <option value="0">所有专业</option>
 
-                {% for i in range(pagination.begin, pagination.end + 1) %}
-
-                  <li class="page-item {% if i == pagination.page %} active {% else %} {% endif %}"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-
+                {% for categories in specialtycategory %}
+                  <option value="{{ categories.id }}" {% if query.category == categories.id %} selected {% else %} {% endif %}>{{ categories.category }}</option>
                 {% endfor %}
 
-                <li class="page-item">
-                  <a class="page-link" href="?page={% if((pagination.page + 1) > pagination.total_pages) %} {{ pagination.total_pages }} {% else %} {{ pagination.page + 1 }} {% endif %}">Next</a>
-                </li>
-              </ul>
-            </nav>
-          {% endif %}
+            </select>
+            <input type="submit" class="btn btn-secondary btnshaixuan" name="" value="筛选">
+          </form>
+
 
         </div>
       </div>
@@ -85,6 +77,34 @@
         {% if stauts %}
         <div class="alert alert-danger" role="alert"><strong>没有查询到此学生</strong></div>
         {% endif %}
+      </div>
+
+      <div class="row juz ">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+          {% if pagination %}
+            <nav>
+              <ul class="pagination justify-content-center">
+                <li class="page-item {% if pagination.page == pagination.begin %} disabled {% else %} {% endif %}">
+                  <a class="page-link" href="?page={% if((pagination.page - 1) <= 0)%} 1 {% else %} {{ (pagination.page - 1) + pagination.search }} {% endif %}">Previous</a>
+                </li>
+
+                {% for i in range(pagination.begin, pagination.end + 1) %}
+
+                  <li class="page-item {% if i == pagination.page %} active {% else %} {% endif %}"><a class="page-link" href="?page={{ i + pagination.search }}">{{ i }}</a></li>
+
+                {% endfor %}
+
+                <li class="page-item {% if pagination.page == pagination.end %} disabled {% else %} {% endif %}">
+                  <a class="page-link" href="?page={% if((pagination.page + 1) > pagination.total_pages) %} {{ pagination.total_pages }} {% else %} {{ (pagination.page + 1) + pagination.search }} {% endif %}">Next</a>
+                </li>
+              </ul>
+            </nav>
+          {% endif %}
+
+        </div>
+        <div class="col-md-4"></div>
       </div>
 
 

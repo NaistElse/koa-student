@@ -14,17 +14,28 @@ module.exports = {
 
     var
         sname = ctx.query.sname || '',
-        page = ctx.query.page ? parseInt(ctx.query.page) : 1
+        page = ctx.query.page ? parseInt(ctx.query.page) : 1,
+        where = '1 = 1',
+        search = ''
 
 
     page = page < 1 ? 1 : page
 
-    console.log(page)
+
+
+
+    if(ctx.query.category && ctx.query.category !== '0') {
+      where +=' and students.sdept_id = ' + ctx.query.category
+      search +='&category=' + ctx.query.category
+    }
+
 
     const specialtycategory = await db.query('select * from specialty')
 
     // 总的学生
-    const total_students = await db.query(`SELECT COUNT(1) AS count FROM students INNER JOIN specialty ON students.sdept_id = specialty.id`)
+    const total_students = await db.query(`SELECT COUNT(1) AS count FROM students
+                                           INNER JOIN specialty ON students.sdept_id = specialty.id
+                                           where ${where}`)
 
 
     total_pages = parseInt(Math.ceil(total_students[0].count / everypage_size)) // 总的页数
@@ -53,6 +64,7 @@ module.exports = {
                                      students.ssex, students.sclass, students.spwd,
                                      students.sdept_id, specialty.category FROM students
                                      INNER JOIN specialty ON students.sdept_id = specialty.id
+                                     WHERE ${where}
                                      LIMIT ${offset}, ${everypage_size}`)
 
 
@@ -73,16 +85,16 @@ module.exports = {
         begin,
         page,
         end,
-        total_pages
+        total_pages,
+        search
     }
-
-    console.log(pagination)
 
 
     await ctx.render('list', {
       students,
       specialtycategory,
-      pagination
+      pagination,
+      query: ctx.query
     })
 
   }

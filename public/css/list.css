@@ -59,3 +59,14 @@ a:active{
   top: 20px;
   left: 300px;
 }
+
+.shaixuan{
+  width: 220px;
+  position: absolute;
+}
+
+.btnshaixuan{
+  position: relative;
+  float: right;
+  right: 10px;
+}
