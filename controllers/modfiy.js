@@ -17,12 +17,13 @@ module.exports = {
         ssex = ctx.request.body.ssex,
         sclass = ctx.request.body.sclass,
         sdept_id = parseInt(ctx.request.body.sdept_id),
-        spwd = parseInt(ctx.request.body.spwd)
+        spwd = ctx.request.body.spwd,
+        reg = /^[0-9]\d*$/
 
-    if(sno == '' || sname == '' || ssex == '' || sclass == '' || sdept_id == '' || spwd == '') {
+    if(sno == '' || sname == '' || ssex == '' || sclass == '' || sdept_id == '' || !reg.test(spwd)) {
       return ctx.body = {
         stauts: 0,
-        message: '请填写完整'
+        message: '请填写完整(密码为数字)'
       }
     }
 
