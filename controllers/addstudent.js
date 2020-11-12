@@ -1,5 +1,7 @@
 // 添加学生信息
 const db = require('../database')
+const md = require('md5')
+
 
 
 module.exports = {
